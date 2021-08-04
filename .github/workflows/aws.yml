@@ -85,6 +85,7 @@ jobs:
     - name: Find if Docker image on port 80 is running
       run: |
         # Find if some web-server container is currently running on port 80 and kill it
+        echo "Looking for container on port 80..."
         ID=$(docker container ls --format="{{.ID}}\t{{.Ports}}" |\
         grep ${PORT}
         echo "Found Container ID: ${ID}"
