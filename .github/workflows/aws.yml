@@ -85,9 +85,10 @@ jobs:
     - name: Find if Docker image on port 80 is running
       run: |
         # Find if some web-server container is currently running on port 80 and kill it
-        ID = $(docker container ls --format="{{.ID}}\t{{.Ports}}" |\
+        ID=$(docker container ls --format="{{.ID}}\t{{.Ports}}" |\
         grep ${PORT}
         echo "Found Container ID: ${ID}"
+        echo "Removing it..."
         docker container stop ${ID} && docker container rm ${ID}
         
     - name: Deploy Amazon ECS task definition
