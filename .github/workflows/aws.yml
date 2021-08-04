@@ -90,7 +90,7 @@ jobs:
         grep 80/tcp)
         echo "Found Container ID: ${ID}"
         echo "Removing it..."
-        docker container stop ${ID} && docker container rm ${ID}
+        docker container stop ${ID}
         
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
