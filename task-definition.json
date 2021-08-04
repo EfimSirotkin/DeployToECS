@@ -29,7 +29,7 @@
             "memoryReservation": 128,
             "volumesFrom": [],
             "stopTimeout": null,
-            "image": "099094904996.dkr.ecr.eu-north-1.amazonaws.com/github-actions-deploy",
+            "image": "099094904996.dkr.ecr.eu-north-1.amazonaws.com/github-actions-deploy:0886372abade4ca7f7d683e311ba0d1169a32be2",
             "startTimeout": null,
             "firelensConfiguration": null,
             "dependsOn": null,
@@ -49,7 +49,7 @@
             "name": "github-actions-container"
         }
     ],
-    "memory": "512",
+    "memory": null,
     "taskRoleArn": "arn:aws:iam::099094904996:role/ecsTaskExecutionRole",
     "family": "github-actions-td",
     "pidMode": null,
@@ -57,7 +57,7 @@
         "EC2"
     ],
     "networkMode": "bridge",
-    "cpu": "256",
+    "cpu": null,
     "inferenceAccelerators": null,
     "proxyConfiguration": null,
     "volumes": [],
