@@ -82,18 +82,6 @@ jobs:
         container-name: ${{ env.CONTAINER_NAME }}
         image: ${{ steps.build-image.outputs.image }}
         
-    - name: Find if Docker image on port 80 is running
-      run: |
-        # Find if some web-server container is currently running on port 80 and kill it
-        echo "Looking for container on port 80..."
-        ID=$(docker container ls --format="{{.ID}}\t{{.Ports}}" |\
-        grep 80/tcp)
-        if[ -n "${ID}" ]; then
-        echo "Found Container ID: ${ID}"
-        echo "Removing it..."
-        docker container stop ${ID}
-        fi
-        
     - name: Deploy Amazon ECS task definition
       uses: aws-actions/amazon-ecs-deploy-task-definition@v1
       with:
