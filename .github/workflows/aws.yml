@@ -46,8 +46,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       
-    - name: List working directory
-      run: ls Docker
+    - name: List currentrly running containers
+      run: docker ps
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
