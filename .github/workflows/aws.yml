@@ -32,7 +32,7 @@ name: Deploy to Amazon ECS
 env:
   AWS_REGION_NAME: "eu-north-1"
   CONTAINER_NAME: "github-actions-container"
-  SERVICE_NAME: "github-actions-service-daemon"
+  SERVICE_NAME: "github-actions-service"
   CLUSTER_NAME: "github-actions-cluster-new"
 
 
