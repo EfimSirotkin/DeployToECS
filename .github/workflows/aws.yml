@@ -97,7 +97,7 @@ jobs:
    environment: production
    steps:
    - name: Check if image output presents
-     run: echo "Image = ${{needs.build.outputs.image}}"
+     run: echo "Image = ${{ secrets.ECR_REGISTRY }}${{ needs.build.outputs.image }}
    
    - name: Fill in the new image ID in the Amazon ECS task definition [Deploying stage]
      id: task-def
