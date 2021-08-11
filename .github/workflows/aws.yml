@@ -23,12 +23,6 @@
 #    See the documentation for each action used below for the recommended IAM policies for this IAM user,
 #    and best practices on handling the access key credentials.
 
-on:
-  push:
-    branches: [master]
-
-name: Deploy to Amazon ECS
-
 env:
   AWS_REGION_NAME: "eu-north-1"
   CONTAINER_NAME: "github-actions-container"
@@ -36,31 +30,36 @@ env:
   CLUSTER_NAME: "github-actions-cluster-new"
 
 
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+name: Deploy to Amazon ECS
+
 jobs:
-  deploy:
-    name: Deploy
+  build:
+    name: Build
     runs-on: ubuntu-latest
     environment: production
 
     steps:
-    - name: Checkout
+    - name: Checkout [Build stage]
       uses: actions/checkout@v2
-      
-    - name: List currentrly running containers
-      run: docker ps
 
-    - name: Configure AWS credentials
+    - name: Configure AWS credentials [Build stage]
       uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION_NAME }}
 
-    - name: Login to Amazon ECR
+    - name: Login to Amazon ECR [Build stage]
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Build, tag, and push image to Amazon ECR
+    - name: Build, tag, and push image to Amazon ECR [Build stage]
       id: build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -73,20 +72,26 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./Docker
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-
-    - name: Fill in the new image ID in the Amazon ECS task definition
-      id: task-def
-      uses: aws-actions/amazon-ecs-render-task-definition@v1
-      with:
-        task-definition: task-definition.json
-        container-name: ${{ env.CONTAINER_NAME }}
-        image: ${{ steps.build-image.outputs.image }}
         
-    - name: Deploy Amazon ECS task definition
-      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
-      with:
-        task-definition: ${{ steps.task-def.outputs.task-definition }}
-        service: ${{ env.SERVICE_NAME }}
-        cluster: ${{ env.CLUSTER_NAME }}
-        wait-for-service-stability: true
-        force-new-deployment: true
+  deploy:
+   name: Deploy
+   runs-on: ubuntu-latest
+   if: github.ref == 'refs/heads/master'
+   environment: production
+   steps:
+   - name: Fill in the new image ID in the Amazon ECS task definition [Deploying stage]
+     id: task-def
+     uses: aws-actions/amazon-ecs-render-task-definition@v1
+     with:
+      task-definition: task-definition.json
+      container-name: ${{ env.CONTAINER_NAME }}
+      image: ${{ steps.build-image.outputs.image }}
+        
+   - name: Deploy Amazon ECS task definition [Deploying stage]
+     uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+     with:
+      task-definition: ${{ steps.task-def.outputs.task-definition }}
+      service: ${{ env.SERVICE_NAME }}
+      cluster: ${{ env.CLUSTER_NAME }}
+      wait-for-service-stability: true
+      force-new-deployment: true
