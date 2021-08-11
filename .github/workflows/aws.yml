@@ -76,7 +76,7 @@ jobs:
         # be deployed to ECS.
         docker build -t $ECR_REGISTRY2/$ECR_REPOSITORY:$IMAGE_TAG ./Docker
         docker push $ECR_REGISTRY2/$ECR_REPOSITORY:$IMAGE_TAG
-        echo "::set-output name=image::$ECR_REGISTRY2/$ECR_REPOSITORY:$IMAGE_TAG"
+        echo "::set-output name=image::/$ECR_REPOSITORY:$IMAGE_TAG"
         echo $ECR_REGISTRY
         echo $ECR_REPOSITORY
         echo $IMAGE_TAG
@@ -104,7 +104,7 @@ jobs:
      uses: aws-actions/amazon-ecs-render-task-definition@v1
      with:
       task-definition: ${{ env.TASK_DEFINITION_FILE }}
-      image: ${{ needs.build.outputs.image2 }}
+      image: ${{ secrets.ECR_REGISTRY }}${{ needs.build.outputs.image }}
       container-name: ${{ env.CONTAINER_NAME }}
       
         
