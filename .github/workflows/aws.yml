@@ -28,6 +28,7 @@ env:
   CONTAINER_NAME: "github-actions-container"
   SERVICE_NAME: "github-actions-service"
   CLUSTER_NAME: "github-actions-cluster-new"
+  TASK_DEFINITION_FILE: "task-definition.json"
 
 on:
   push:
@@ -86,9 +87,10 @@ jobs:
      id: task-def
      uses: aws-actions/amazon-ecs-render-task-definition@v1
      with:
-      task-definition: task-definition.json
+      task-definition: ${{ env.TASK_DEFINITION_FILE }}
+      image: ${{ needs.build.outputs.image }}
       container-name: ${{ env.CONTAINER_NAME }}
-      image: echo ${{ needs.build.outputs.image }}
+      
         
    - name: Deploy Amazon ECS task definition [Deploying stage]
      uses: aws-actions/amazon-ecs-deploy-task-definition@v1
