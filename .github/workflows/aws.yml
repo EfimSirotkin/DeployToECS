@@ -46,6 +46,7 @@ jobs:
     
     outputs:
       image: ${{ steps.build-image.outputs.image }}
+      image2: ${{ steps.export-image.outputs.image2 }}
 
     steps:
     - name: Checkout [Build stage]
@@ -75,6 +76,14 @@ jobs:
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./Docker
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+        
+    - name: Export image
+      id: export-image
+      env:
+        IMAGE: ${{steps.build-image.outputs.image}}
+      run: |
+        echo $IMAGE
+        echo "set-output name=image2::$IMAGE"
         
   deploy:
    name: Deploy
