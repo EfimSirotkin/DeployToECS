@@ -27,7 +27,7 @@ env:
   AWS_REGION_NAME: "eu-north-1"
   CONTAINER_NAME: "github-actions-container"
   SERVICE_NAME: "github-actions-service"
-  CLUSTER_NAME: "github-actions-cluster-new"
+  CLUSTER_NAME: "github-actions-cluster"
   TASK_DEFINITION_FILE: "task-definition.json"
 
 on:
