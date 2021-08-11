@@ -88,6 +88,13 @@ jobs:
     - name: Checkout [Deployment stage]
       uses: actions/checkout@v2
     
+    - name: Configure AWS credentials [Deployment stage]
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION_NAME }}
+
     - name: Check if image output presents
       run: echo "Image = ${{ secrets.ECR_REGISTRY }}${{ needs.build.outputs.image }}"
    
