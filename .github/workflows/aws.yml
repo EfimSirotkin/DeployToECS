@@ -29,7 +29,6 @@ env:
   SERVICE_NAME: "github-actions-service"
   CLUSTER_NAME: "github-actions-cluster-new"
 
-
 on:
   push:
     branches: [master]
