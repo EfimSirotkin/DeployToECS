@@ -100,7 +100,7 @@ jobs:
      uses: aws-actions/amazon-ecs-render-task-definition@v1
      with:
       task-definition: ${{ env.TASK_DEFINITION_FILE }}
-      image: ${{ needs.build.outputs.image }}
+      image: ${{ needs.build.outputs.image2 }}
       container-name: ${{ env.CONTAINER_NAME }}
       
         
