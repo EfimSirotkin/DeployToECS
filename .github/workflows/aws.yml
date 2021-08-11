@@ -84,6 +84,10 @@ jobs:
     if: github.ref == 'refs/heads/master'
     environment: production
     steps:
+    
+    - name: Checkout [Deployment stage]
+      uses: actions/checkout@v2
+    
     - name: Check if image output presents
       run: echo "Image = ${{ secrets.ECR_REGISTRY }}${{ needs.build.outputs.image }}"
    
